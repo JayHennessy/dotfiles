@@ -18,6 +18,22 @@ if [ ! -f "${AGE_KEY_ENCRYPTED}" ]; then
     exit 1
 fi
 
+# Install age if not available (needed before mise is set up)
+if ! command -v age &>/dev/null; then
+    echo "==> age not found, installing..."
+    TMPDIR=$(mktemp -d)
+    ARCH=$(uname -m)
+    case "${ARCH}" in
+        x86_64)  ARCH="amd64" ;;
+        aarch64) ARCH="arm64" ;;
+    esac
+    curl -sSfL "https://dl.filippo.io/age/latest?for=linux/${ARCH}" | tar -xz -C "${TMPDIR}"
+    sudo install "${TMPDIR}/age/age" /usr/local/bin/age
+    sudo install "${TMPDIR}/age/age-keygen" /usr/local/bin/age-keygen
+    rm -rf "${TMPDIR}"
+    echo "==> age installed to /usr/local/bin/"
+fi
+
 echo "==> Decrypting age key (you will be prompted for your passphrase)..."
 mkdir -p "$(dirname "${AGE_KEY_FILE}")"
 age --decrypt --output "${AGE_KEY_FILE}" "${AGE_KEY_ENCRYPTED}"
