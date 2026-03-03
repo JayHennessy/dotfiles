@@ -1,0 +1,71 @@
+apiVersion: v1
+clusters:
+    - cluster:
+        certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCVENDQWUyZ0F3SUJBZ0lJUGhPdXBQWUVHU0V3RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TXpBNU1EY3hOekF3TVRkYUZ3MHpNekE1TURReE56QXdNVGRhTUJVeApFekFSQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLCkFvSUJBUUNsWEROOWQwWUJ5OVRkdlZuVmdoWDRsLzdMSVZYZ2s1L0VFSm5mSDROd2tDN2wxQU83eFFlWE00cEMKcUxiOFdMdjBuNnVkRmNLY2E3bUxDTHI0NVpINnM3QWdXbG4yVFJDMTRiTHk5UElHNjRZT2RBREJwNFYrSHk3VApIOXh2UXEzSCtzRFpIQUx2MkZiNzliVWt6Z0NHMnN0VTlhNGxocEJPQW9XbEpUYzg2UjVxYmpjZ2ljSWZQSXJRClZFNzdhaTB6SVRqS3k5ZXBGdzZPVm4xNm15aWdHa2JYQVlkYkJSMzNSOFhGOHB1dmRwaFVqMFBjZ0JGOTRXQ2cKb0QwU3RzbzdZbWoycU1UdGthVGt2V1FwTkUxeGQ5OG9hTnpWY203ckNDUG5uUkZGeTFUditMWmxRemZadzVQcgpLSGFESGFmTmJjZS9xZ01rVDYxWk9aMFZjSVl6QWdNQkFBR2pXVEJYTUE0R0ExVWREd0VCL3dRRUF3SUNwREFQCkJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJTRUJ1SmJMVUwyenMyZnFhTDFBMHJIVEZncTVEQVYKQmdOVkhSRUVEakFNZ2dwcmRXSmxjbTVsZEdWek1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQU4yTTk0SlRUMApMOXArRVJkYW9TWHplMll0YlM4S3ZaMzFYVmV1OFpBdWJxVzNVZUxDckNyeCsyTVVkKys5UThSK1dSYkQycGxVCndiVEdiYkNqb1MzVXVEMjRFamZKZjRTYXBCbVEzV1RMMWRETGsybVZjQ0RhcHdnY1VYRjZpK3JhV3NBQWRJcjMKT09ac1prS0lqbVpSVzdmUmpiWVlEMWVJdDB6a2E1Y3ZtaG1CY2p4UWhRNEhTRDNsOFg4ZFI0b3QzR0dvNEd4QQpFWTd1dXRnMFdNajdGc2dOQms4YWE0WmxXMVpmclZGcHZvTlVkU2tDbEJqTVRYWW1xRXh3OTkvZ29iQVRBUVl5ClJ4YkhUM2djT2Q3aU1rYkR6bkFmcFhlMTBPOW16cXl3NDgxd2VJb2Z5TmxySzFoSnZKWnl2QWVRTnNBU1hLbmoKVHhJd2hoNTNIc055Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+        server: https://D1E26895C343330DA4CB0B0F90011057.gr7.ca-central-1.eks.amazonaws.com
+      name: arn:aws:eks:ca-central-1:876954890468:cluster/dev
+    - cluster:
+        certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCVENDQWUyZ0F3SUJBZ0lJQk1SL21GaGsydll3RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TkRBM01UY3lNREV4TVROYUZ3MHpOREEzTVRVeU1ERTJNVE5hTUJVeApFekFSQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLCkFvSUJBUURIcDRCQmR3U0JKQ2R5SzQ3b2JmcERlNmZCOW5JRlpFM2taYW5oeis1QkVqQnlmYWJOZ1FvamQ2VXkKMWNYcnRDWEFEUzQyL2VOdTVHV2k4dFp4TDVzL0o5Slgwb1VaNEdtdS8zZS9qQzQ0a0JpclNNOGUyQXZCYXE4MQpuZXladmxBbkNYY1F3SU0vZ3pwN25aaEZZRWlzekdIbFA4NVRmME1VVjBSWFZwdWNsMG0xZFJEU1Exa3owTkt1CkdjUTZNRlBoRC9XN0plWEpYaXEzUzhSTFh1THA1aUtEKzQ5d0tWdnBhOGR3NHIyQ0wrSjVoRTMwSEFjdXYrazgKQXRUL1RtektYdy9ZR1hjRUxQZDkzSU9Ed01WeFNGYXAxTDlVUk13ZHVoRmRBVEVXTWVzdlZpMzU1L25UTElWMQpxalNmbWd3SFFPSlF1blBxY2lPdTFJckE4K294QWdNQkFBR2pXVEJYTUE0R0ExVWREd0VCL3dRRUF3SUNwREFQCkJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJUWmx0aEE4OTdLYjU4Tzg5bXRXT3BLUTdvcVR6QVYKQmdOVkhSRUVEakFNZ2dwcmRXSmxjbTVsZEdWek1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQkNGN0R1c0M3VgpuQmQyalBTSlRBTW9ZK1E0Vks1N0JOVERsZldDNVA2ZHdkUnRiZkJnbWdBQlNCMmYrSVFDanBTRzB1WVZoSDFqClN5Qi94UzcxS1lJWm1vNndIVHRxQk1xeWxKVXdGaC9hNUsrZ0hvcm1tN1RacURMY3RWdElhSkV1ZThVYVVyaTkKckt4ZURSMXpmY2hIYmR3cFR1WU5GMXV0Z1pBSjloUU8zKytDVS9ETEk4MkI1Q1VuaGdtRHlCbmo5Vy9qSHEwbApDUERYSTAzK3VnTm44VkJ1QmgzU21zTldBaXM4Rk5RT3JmdU5DR29uZkMycUQvUEVzSVIrNEdXbjlta1BQRm1PCi9uYnBDU0dKMzlwNUJ2Z3N1Z1pmdW9rbTJMSUNnaFlmeUN2TmNTQWMzK2JsNCtsMTdBUDJBOFhYaW90SnE3NVMKUm1Oc2hwbDNZZzFnCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+        server: https://8F4150CCC5DA6C82B52F6E0B195C8A3E.yl4.ca-central-1.eks.amazonaws.com
+      name: arn:aws:eks:ca-central-1:905417997053:cluster/prod
+    - cluster:
+        server: https://gke-b7686c7bbe5c4c50b012fbf60b26ebe7a079-167861042000.northamerica-northeast2.gke.goog
+      name: gke_altislabproject_northamerica-northeast2_cupcake
+contexts:
+    - context:
+        cluster: arn:aws:eks:ca-central-1:876954890468:cluster/dev
+        namespace: kubeflow-jay
+        user: arn:aws:eks:ca-central-1:876954890468:cluster/dev
+      name: arn:aws:eks:ca-central-1:876954890468:cluster/dev
+    - context:
+        cluster: arn:aws:eks:ca-central-1:905417997053:cluster/prod
+        namespace: default
+        user: arn:aws:eks:ca-central-1:905417997053:cluster/prod
+      name: arn:aws:eks:ca-central-1:905417997053:cluster/prod
+    - context:
+        cluster: gke_altislabproject_northamerica-northeast2_cupcake
+        user: gke_altislabproject_northamerica-northeast2_cupcake
+      name: gke_altislabproject_northamerica-northeast2_cupcake
+current-context: arn:aws:eks:ca-central-1:876954890468:cluster/dev
+kind: Config
+preferences: {}
+users:
+    - name: arn:aws:eks:ca-central-1:876954890468:cluster/dev
+      user:
+        exec:
+            apiVersion: client.authentication.k8s.io/v1beta1
+            args:
+                - --region
+                - ca-central-1
+                - eks
+                - get-token
+                - --cluster-name
+                - dev
+            command: aws
+            env: null
+            interactiveMode: IfAvailable
+            provideClusterInfo: false
+    - name: arn:aws:eks:ca-central-1:905417997053:cluster/prod
+      user:
+        exec:
+            apiVersion: client.authentication.k8s.io/v1beta1
+            args:
+                - --region
+                - ca-central-1
+                - eks
+                - get-token
+                - --cluster-name
+                - prod
+            command: aws
+            env:
+                - name: AWS_PROFILE
+                  value: bccancer
+            interactiveMode: IfAvailable
+            provideClusterInfo: false
+    - name: gke_altislabproject_northamerica-northeast2_cupcake
+      user:
+        exec:
+            apiVersion: client.authentication.k8s.io/v1beta1
+            command: gke-gcloud-auth-plugin
+            installHint: Install gke-gcloud-auth-plugin for use with kubectl by following https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl#install_plugin
+            provideClusterInfo: true

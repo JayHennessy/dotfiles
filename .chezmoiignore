@@ -12,3 +12,8 @@ aws-ssh-plan.md
 .aws/cli/
 .aws/sso/
 .aws/old-config
+
+# Kube
+.kube/cache/
+.kube/gke_gcloud_auth_plugin_cache
+.kube/kubectx
