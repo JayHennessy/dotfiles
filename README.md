@@ -1,20 +1,20 @@
-# jay-env-setup
+# dotfiles
 
-Reproducible dev environment using [chezmoi](https://www.chezmoi.io/) + [mise](https://mise.jdx.dev/).
+Reproducible dev environment using [chezmoi](https://www.chezmoi.io/) + [mise](https://mise.jdx.dev/). Sensitive files (SSH private keys, AWS credentials) are encrypted with [age](https://age-encryption.org/).
 
 ## One-Command Bootstrap
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/JayHennessy/jay-env-setup/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/JayHennessy/dotfiles/main/install.sh | bash
 ```
 
-This installs chezmoi, clones this repo, installs all tools, and applies all configs. Supports Debian/Ubuntu, Fedora, RHEL, and Amazon Linux.
+This installs chezmoi, clones this repo, **prompts for your age passphrase** to decrypt SSH keys and AWS credentials, installs all tools, and applies all configs. Supports Debian/Ubuntu, Fedora, RHEL, and Amazon Linux.
 
 ## What Gets Installed
 
-### Via mise (23 tools)
+### Via mise (28 tools)
 
-Python, Node.js, Bun, Go, GitHub CLI, AWS CLI, Google Cloud SDK, Terraform, s5cmd, DuckDB, uv, k9s, lazygit, lazydocker, yazi, process-compose, fzf, just, bottom, jq, Neovim, zellij, tmux, zoxide, ripgrep
+Python, Node.js, Bun, Go, GitHub CLI, AWS CLI, Google Cloud SDK, Terraform, s5cmd, DuckDB, uv, k9s, lazygit, lazydocker, yazi, process-compose, fzf, just, bottom, jq, Neovim, zellij, tmux, zoxide, ripgrep, aws-vault, age, Bitwarden CLI
 
 ### Via other methods
 
@@ -40,6 +40,9 @@ Python, Node.js, Bun, Go, GitHub CLI, AWS CLI, Google Cloud SDK, Terraform, s5cm
 - **Neovim**: LazyVim-based config with codediff.nvim plugin
 - **Yazi**: File manager with DuckDB previews for csv/json/parquet
 - **Kitty**: Terminal config
+- **SSH**: Config + 12 private keys (age-encrypted) + 2 public keys
+- **AWS**: SSO config (plain) + credentials (age-encrypted)
+- **Kube**: Cluster configs for EKS and GKE (exec-based auth, no embedded secrets)
 
 ## Shell Aliases
 
@@ -53,6 +56,22 @@ Python, Node.js, Bun, Go, GitHub CLI, AWS CLI, Google Cloud SDK, Terraform, s5cm
 | `yy` | yazi with cd-on-exit |
 | `lw` | `lazyworktree` |
 
+## Encryption
+
+Sensitive files (SSH private keys, AWS credentials) are encrypted with [age](https://age-encryption.org/) before being stored in this repo. The age identity key is itself passphrase-protected (`key.txt.age`).
+
+**On a new machine**, the bootstrap script (`install.sh`) handles everything automatically:
+1. Installs `age` if not present
+2. Prompts for your passphrase to decrypt the age identity key
+3. Runs `chezmoi apply` which decrypts all encrypted files
+
+**If setting up manually** (without `install.sh`):
+```bash
+chezmoi init JayHennessy/dotfiles           # clone repo + generate config
+age --decrypt --output ~/.config/chezmoi/key.txt "$(chezmoi source-path)/key.txt.age"  # decrypt age key
+chezmoi apply                                # apply all files (encrypted ones now work)
+```
+
 ## Updating
 
 On other machines, pull and apply in one step:
@@ -61,7 +80,7 @@ On other machines, pull and apply in one step:
 chezmoi update
 ```
 
-This pulls the latest changes from the repo and re-applies. If `mise/config.toml` changed, tools will be re-installed automatically.
+This pulls the latest changes from the repo and re-applies. If `mise/config.toml` changed, tools will be re-installed automatically. The age identity key must already be decrypted at `~/.config/chezmoi/key.txt` (done once during initial bootstrap).
 
 ### Making Changes
 
