@@ -11,9 +11,23 @@ if ! command -v chezmoi &>/dev/null; then
     export PATH="$HOME/.local/bin:$PATH"
 fi
 
-# Init dotfiles (generates config, does NOT apply yet)
-echo "==> Initializing dotfiles with chezmoi..."
-chezmoi init JayHennessy/dotfiles
+# Point chezmoi at this repo if running from a local clone,
+# otherwise clone from GitHub into chezmoi's default source dir.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CHEZMOI_SOURCE="$(chezmoi source-path 2>/dev/null || echo "$HOME/.local/share/chezmoi")"
+
+if [ -f "${SCRIPT_DIR}/.chezmoiroot" ] || [ -d "${SCRIPT_DIR}/dot_config" ]; then
+    echo "==> Running from local clone: ${SCRIPT_DIR}"
+    if [ "${SCRIPT_DIR}" != "${CHEZMOI_SOURCE}" ]; then
+        rm -rf "${CHEZMOI_SOURCE}"
+        ln -s "${SCRIPT_DIR}" "${CHEZMOI_SOURCE}"
+        echo "==> Linked chezmoi source -> ${SCRIPT_DIR}"
+    fi
+    chezmoi init
+else
+    echo "==> Initializing dotfiles from GitHub..."
+    chezmoi init JayHennessy/dotfiles
+fi
 
 # Decrypt age key before apply (needed to decrypt encrypted files)
 AGE_KEY_FILE="${HOME}/.config/chezmoi/key.txt"
