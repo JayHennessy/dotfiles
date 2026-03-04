@@ -1,6 +1,7 @@
 [default]
 region=ca-central-1
 output=json
+duration_seconds=28800
 
 [profile kflow]
 region=ca-central-1
