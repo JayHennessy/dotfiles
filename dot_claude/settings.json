@@ -1,5 +1,7 @@
 {
-  "autoMode": true,
+  "autoMode": {
+    "enabled": true
+  },
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.sh"
@@ -37,6 +39,7 @@
     }
   },
   "enabledPlugins": {
-    "warp@claude-code-warp": {}
+    "warp@claude-code-warp": true,
+    "altis-skills@altis-skills": true
   }
 }
