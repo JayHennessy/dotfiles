@@ -7,3 +7,34 @@
     type = "git-repo"
     url = "https://github.com/zsh-users/zsh-syntax-highlighting.git"
     refreshPeriod = "168h"
+
+# Claude Code plugin marketplaces
+[".claude/plugins/marketplaces/claude-plugins-official"]
+    type = "git-repo"
+    url = "https://github.com/anthropics/claude-plugins-official.git"
+    refreshPeriod = "168h"
+
+[".claude/plugins/marketplaces/claude-code-warp"]
+    type = "git-repo"
+    url = "https://github.com/warpdotdev/claude-code-warp.git"
+    refreshPeriod = "168h"
+
+[".claude/plugins/marketplaces/superpowers"]
+    type = "git-repo"
+    url = "https://github.com/obra/superpowers.git"
+    refreshPeriod = "168h"
+
+[".claude/plugins/marketplaces/agents"]
+    type = "git-repo"
+    url = "https://github.com/wshobson/agents.git"
+    refreshPeriod = "168h"
+
+[".claude/plugins/marketplaces/altis-skills"]
+    type = "git-repo"
+    url = "https://github.com/altis-labs/skills.git"
+    refreshPeriod = "168h"
+
+[".claude/plugins/marketplaces/caveman"]
+    type = "git-repo"
+    url = "https://github.com/JuliusBrussee/caveman.git"
+    refreshPeriod = "168h"

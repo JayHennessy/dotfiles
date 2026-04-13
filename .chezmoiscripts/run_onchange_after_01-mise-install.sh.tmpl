@@ -26,9 +26,12 @@ if command -v mise &>/dev/null; then
     if command -v npm &>/dev/null; then
         echo "    Installing tldr..."
         npm install -g tldr 2>/dev/null || true
+    fi
 
+    # Claude Code (standalone installer)
+    if ! command -v claude &>/dev/null; then
         echo "    Installing Claude Code..."
-        npm install -g @anthropic-ai/claude-code 2>/dev/null || true
+        curl -fsSL https://claude.ai/install.sh | bash 2>/dev/null || true
     fi
 
     # Go-based tools
@@ -38,6 +41,17 @@ if command -v mise &>/dev/null; then
 
         echo "    Installing lazyworktree..."
         go install github.com/chmouel/lazyworktree/cmd/lazyworktree@latest 2>/dev/null || true
+
+        echo "    Installing diffnav..."
+        go install github.com/dlvhdr/diffnav@latest 2>/dev/null || true
+    fi
+
+    # gh extensions
+    if command -v gh &>/dev/null; then
+        if ! gh extension list 2>/dev/null | grep -q "dlvhdr/gh-dash"; then
+            echo "    Installing gh-dash..."
+            gh extension install dlvhdr/gh-dash 2>/dev/null || true
+        fi
     fi
 fi
 

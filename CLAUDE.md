@@ -1,5 +1,9 @@
 # Project Guidelines
 
+## Commits
+
+- **Never include `Co-Authored-By` lines in commit messages.** No Claude co-authorship attribution.
+
 ## Mise Tool Management
 
 - **Always verify a tool exists in the mise registry before adding it to `dot_config/mise/config.toml`.**

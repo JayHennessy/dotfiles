@@ -8,6 +8,15 @@
 [core]
     editor = nvim
     autocrlf = input
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
+    side-by-side = true
+    line-numbers = true
 
 [pull]
     rebase = true
@@ -28,3 +37,11 @@
 
 [merge]
     conflictstyle = diff3
+
+[credential "https://github.com"]
+    helper =
+    helper = !/usr/bin/env gh auth git-credential
+
+[credential "https://gist.github.com"]
+    helper =
+    helper = !/usr/bin/env gh auth git-credential
