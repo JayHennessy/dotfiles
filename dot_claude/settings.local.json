@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.chezmoi.io)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:mise.jdx.dev)",
+      "WebSearch",
+      "WebFetch(domain:natelandau.com)",
+      "WebFetch(domain:www.deployhq.com)"
+    ]
+  }
+}

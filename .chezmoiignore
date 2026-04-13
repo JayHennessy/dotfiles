@@ -3,11 +3,6 @@ install.sh
 LICENSE
 aws-ssh-plan.md
 
-# SSH
-.ssh/known_hosts
-.ssh/known_hosts.old
-.ssh/sockets/
-
 # AWS
 .aws/cli/
 .aws/sso/
@@ -17,3 +12,19 @@ aws-ssh-plan.md
 .kube/cache/
 .kube/gke_gcloud_auth_plugin_cache
 .kube/kubectx
+
+# Claude Code (transient/generated files)
+.claude/.credentials.json
+.claude/backups/
+.claude/cache/
+.claude/debug/
+.claude/history.jsonl
+.claude/mcp-needs-auth-cache.json
+.claude/plugins/blocklist.json
+.claude/plugins/known_marketplaces.json
+.claude/plugins/cache/
+.claude/projects/
+.claude/shell-snapshots/
+.claude/stats-cache.json
+.claude/telemetry/
+.claude/todos/
