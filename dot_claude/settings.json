@@ -36,10 +36,17 @@
         "source": "github",
         "repo": "JuliusBrussee/caveman"
       }
+    },
+    "thedotmack": {
+      "source": {
+        "source": "github",
+        "repo": "thedotmack/claude-mem"
+      }
     }
   },
   "enabledPlugins": {
     "warp@claude-code-warp": true,
-    "altis-skills@altis-skills": true
+    "altis-skills@altis-skills": true,
+    "claude-mem@thedotmack": true
   }
 }
