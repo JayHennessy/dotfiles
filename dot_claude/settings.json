@@ -47,6 +47,7 @@
   "enabledPlugins": {
     "warp@claude-code-warp": true,
     "altis-skills@altis-skills": true,
-    "claude-mem@thedotmack": true
+    "claude-mem@thedotmack": true,
+    "caveman@caveman": true
   }
 }
