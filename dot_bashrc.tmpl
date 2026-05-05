@@ -81,7 +81,7 @@ yy() {
 }
 
 # Gemini API - free tier, jay altis email account
-export GEMINI_API_KEY="AIzaSyDToLAbJznWg6m8FR12r2rc09xdZL--oKs"
+export {{ include "dot_gemini_api_key.age" | decrypt | trim }}
 
 # Source local overrides (not managed by chezmoi)
 if [ -f "$HOME/.bashrc.local" ]; then
