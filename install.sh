@@ -46,8 +46,14 @@ if [ ! -f "${AGE_KEY_FILE}" ]; then
                 aarch64) ARCH="arm64" ;;
             esac
             curl -sSfL "https://dl.filippo.io/age/latest?for=linux/${ARCH}" | tar -xz -C "${TMPDIR}"
-            sudo install "${TMPDIR}/age/age" /usr/local/bin/age
-            sudo install "${TMPDIR}/age/age-keygen" /usr/local/bin/age-keygen
+            if command -v sudo &>/dev/null && sudo -n true 2>/dev/null; then
+                sudo install "${TMPDIR}/age/age" /usr/local/bin/age
+                sudo install "${TMPDIR}/age/age-keygen" /usr/local/bin/age-keygen
+            else
+                mkdir -p "$HOME/.local/bin"
+                install "${TMPDIR}/age/age" "$HOME/.local/bin/age"
+                install "${TMPDIR}/age/age-keygen" "$HOME/.local/bin/age-keygen"
+            fi
             rm -rf "${TMPDIR}"
         fi
 
