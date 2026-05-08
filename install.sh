@@ -13,7 +13,7 @@ fi
 
 # Point chezmoi at this repo if running from a local clone,
 # otherwise clone from GitHub into chezmoi's default source dir.
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-}")" && pwd)"
 CHEZMOI_SOURCE="$(chezmoi source-path 2>/dev/null || echo "$HOME/.local/share/chezmoi")"
 
 if [ -f "${SCRIPT_DIR}/.chezmoiroot" ] || [ -d "${SCRIPT_DIR}/dot_config" ]; then

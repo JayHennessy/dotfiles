@@ -38,3 +38,8 @@
     type = "git-repo"
     url = "https://github.com/JuliusBrussee/caveman.git"
     refreshPeriod = "168h"
+
+[".claude/plugins/marketplaces/thedotmack"]
+    type = "git-repo"
+    url = "https://github.com/thedotmack/claude-mem.git"
+    refreshPeriod = "168h"
