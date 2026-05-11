@@ -1,6 +1,6 @@
 return {
   {
-    "JayHennessy/codediff.nvim",
+    "esmuellert/codediff.nvim",
     cmd = { "CodeDiff" },
     opts = {},
   },
