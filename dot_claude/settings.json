@@ -2,10 +2,6 @@
   "autoMode": {
     "enabled": true
   },
-  "statusLine": {
-    "type": "command",
-    "command": "~/.claude/statusline.sh"
-  },
   "extraKnownMarketplaces": {
     "claude-code-warp": {
       "source": {
@@ -42,12 +38,19 @@
         "source": "github",
         "repo": "thedotmack/claude-mem"
       }
+    },
+    "claude-hud": {
+      "source": {
+        "source": "github",
+        "repo": "jarrodwatts/claude-hud"
+      }
     }
   },
   "enabledPlugins": {
     "warp@claude-code-warp": true,
     "altis-skills@altis-skills": true,
     "claude-mem@thedotmack": true,
-    "caveman@caveman": true
+    "caveman@caveman": true,
+    "claude-hud@claude-hud": true
   }
 }
