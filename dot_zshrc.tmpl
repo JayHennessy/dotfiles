@@ -59,6 +59,20 @@ fi
 
 if command -v lazyworktree &>/dev/null; then
     alias lw='lazyworktree'
+    # lwcd: run lazyworktree TUI and cd into selected worktree on exit
+    lwcd() {
+        local sel
+        sel=$(mktemp) || return 1
+        lazyworktree --output-selection "$sel" "$@"
+        local rc=$?
+        if [[ -s "$sel" ]]; then
+            local target
+            target=$(<"$sel")
+            [[ -d "$target" ]] && cd "$target"
+        fi
+        rm -f "$sel"
+        return $rc
+    }
 fi
 
 if command -v yazi &>/dev/null; then
