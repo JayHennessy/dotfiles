@@ -1,6 +1,6 @@
 {
-  "autoMode": {
-    "enabled": true
+  "permissions": {
+    "defaultMode": "auto"
   },
   "statusLine": {
     "type": "command",
@@ -48,6 +48,12 @@
         "source": "github",
         "repo": "jarrodwatts/claude-hud"
       }
+    },
+    "last30days-skill": {
+      "source": {
+        "source": "github",
+        "repo": "mvanhorn/last30days-skill"
+      }
     }
   },
   "enabledPlugins": {
@@ -55,6 +61,7 @@
     "altis-skills@altis-skills": true,
     "claude-mem@thedotmack": true,
     "caveman@caveman": true,
-    "claude-hud@claude-hud": true
+    "claude-hud@claude-hud": true,
+    "last30days@last30days-skill": true
   }
 }
