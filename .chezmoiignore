@@ -4,6 +4,11 @@ LICENSE
 aws-ssh-plan.md
 .gemini_api_key
 
+# Yazi rewrites package.toml itself (hashes, formatting) whenever the
+# yazi-plugins script runs, which would perpetually drift against chezmoi.
+# The script's `ya pkg add` reproduces the plugin list, so let yazi own this.
+.config/yazi/package.toml
+
 # AWS
 .aws/cli/
 .aws/sso/

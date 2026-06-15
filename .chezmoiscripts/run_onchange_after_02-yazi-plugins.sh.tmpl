@@ -18,6 +18,9 @@ fi
 
 echo "==> Installing yazi plugins..."
 ya pkg add wylie102/duckdb 2>/dev/null || true
-ya pkg install
+# --discard: yazi aborts if a deployed plugin's files differ from its recorded
+# hash (it treats them as "locally modified"). The plugins are managed, not
+# hand-edited, so discard and redeploy cleanly instead of failing the apply.
+ya pkg install --discard
 
 echo "==> Yazi plugins installed."

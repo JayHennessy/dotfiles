@@ -1,5 +1,7 @@
-[plugin]
-
 [[plugin.deps]]
 use = "wylie102/duckdb"
 rev = "main"
+hash = ""
+
+[flavor]
+deps = []
