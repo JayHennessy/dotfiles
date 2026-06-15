@@ -8,6 +8,12 @@ echo ""
 if ! command -v chezmoi &>/dev/null; then
     echo "==> Installing chezmoi..."
     sh -c "$(curl -fsSL https://get.chezmoi.io)" -- -b "$HOME/.local/bin"
+    # The installer's BINDIR can resolve one level too deep, stranding the
+    # binary at ~/.local/bin/bin/chezmoi (not on PATH). Flatten if so.
+    if [ -x "$HOME/.local/bin/bin/chezmoi" ] && [ ! -x "$HOME/.local/bin/chezmoi" ]; then
+        mv "$HOME/.local/bin/bin/chezmoi" "$HOME/.local/bin/chezmoi"
+        rmdir "$HOME/.local/bin/bin" 2>/dev/null || true
+    fi
     export PATH="$HOME/.local/bin:$PATH"
 fi
 
