@@ -1,0 +1,14 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  // Plugins are loaded by default on opencode startup and auto-installed from npm.
+  // The opencode `plugin` field is a plain string[] (package name, optional @version).
+  "plugin": [
+    "oh-my-openagent", // code-yeongyu/oh-my-openagent multi-agent harness (OpenCode "Ultimate" edition). npm pkg is oh-my-opencode, dual-published; opencode.json prefers the "oh-my-openagent" entry (legacy "oh-my-opencode" loads with a warning). Full setup (11-agent model config + provider auth) needs a one-time interactive `bunx oh-my-openagent install` per machine — not committable. Anon telemetry on by default; opt out with OMO_DISABLE_POSTHOG=1.
+    "superpowers@git+https://github.com/obra/superpowers.git", // obra/superpowers skills framework (separate from the Claude marketplace install)
+    "opencode-caveman", // caveman token-compression for opencode (npm; the Claude caveman is a separate marketplace plugin)
+    "openrtk", // RTK (Rust Token Killer) - needs the `rtk` binary (installed via mise, home overlay)
+    "openslimedit@latest",
+    "opencode-mem",
+    "opencode-tool-search"
+  ]
+}
