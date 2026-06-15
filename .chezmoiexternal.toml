@@ -9,11 +9,9 @@
     refreshPeriod = "168h"
 
 # Claude Code plugin marketplaces
-[".claude/plugins/marketplaces/claude-plugins-official"]
-    type = "git-repo"
-    url = "https://github.com/anthropics/claude-plugins-official.git"
-    refreshPeriod = "168h"
-
+# NOTE: claude-plugins-official is intentionally NOT managed here — Claude Code
+# downloads the official marketplace itself via GCS (it has no .git), so a
+# git-repo external fails with "exit status 128" and blocks every external below it.
 [".claude/plugins/marketplaces/claude-code-warp"]
     type = "git-repo"
     url = "https://github.com/warpdotdev/claude-code-warp.git"
