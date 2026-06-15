@@ -1,0 +1,7 @@
+# Home-only tools. Merged on top of config.toml when MISE_ENV=home.
+# Move any home-specific tools here from config.toml (the shared list).
+[tools]
+opencode = "latest"
+# rtk (Rust Token Killer) binary - required by the 'openrtk' opencode plugin.
+# Registry maps `rtk` -> aqua:rtk-ai/rtk (the token killer, NOT the crates.io "Rust Type Kit").
+rtk = "latest"

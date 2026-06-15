@@ -1,0 +1,6 @@
+# Work-only tools. Merged on top of config.toml when MISE_ENV=work.
+# Move any work-specific tools here from config.toml (the shared list).
+[tools]
+# example:
+# terraform = "latest"
+# "aws-cli" = "latest"

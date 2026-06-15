@@ -1,16 +1,22 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# config.toml hash: {{ include "dot_config/mise/config.toml" | sha256sum }}
+# config.toml hash:       {{ include "dot_config/mise/config.toml" | sha256sum }}
+# config.work.toml hash:  {{ include "dot_config/mise/config.work.toml" | sha256sum }}
+# config.home.toml hash:  {{ include "dot_config/mise/config.home.toml" | sha256sum }}
+# config.other.toml hash: {{ include "dot_config/mise/config.other.toml" | sha256sum }}
 
 export PATH="$HOME/.local/bin:$PATH"
+
+# Install the shared tools plus this machine's environment overlay.
+export MISE_ENV="{{ .environment }}"
 
 if ! command -v mise &>/dev/null; then
     echo "==> mise not found, skipping tool installation."
     exit 0
 fi
 
-echo "==> Running mise install (this may take a while)..."
+echo "==> Running mise install for environment '${MISE_ENV}' (this may take a while)..."
 mise install -y
 
 echo "==> Installing pip-based tools..."

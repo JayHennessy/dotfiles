@@ -22,6 +22,10 @@ setopt appendhistory
 setopt hist_ignore_dups
 setopt hist_ignore_space
 
+# mise environment (work/home/other) - selected at chezmoi init.
+# Controls which config.<env>.toml overlay mise merges on top of config.toml.
+export MISE_ENV="{{ .environment }}"
+
 # mise
 if command -v mise &>/dev/null; then
     eval "$(mise activate zsh)"

@@ -1,3 +1,5 @@
+{{- $environment := promptStringOnce . "environment" "Environment (work/home/other)" "home" -}}
+
 encryption = "age"
 
 [age]
@@ -8,3 +10,4 @@ encryption = "age"
     git_name = "JayHennessy"
     git_email = "tjay.hennessy@gmail.com"
     github_username = "JayHennessy"
+    environment = {{ $environment | quote }}

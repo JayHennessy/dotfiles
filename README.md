@@ -16,6 +16,8 @@ This installs chezmoi, clones this repo, **prompts for your age passphrase** to 
 
 Python, Node.js, Bun, Go, GitHub CLI, AWS CLI, Google Cloud SDK, Terraform, s5cmd, DuckDB, uv, k9s, lazygit, lazydocker, yazi, process-compose, fzf, just, bottom, jq, Neovim, zellij, tmux, zoxide, ripgrep, aws-vault, age, delta, Bitwarden CLI
 
+This is the **shared** set installed everywhere; individual machines can add more via [environment overlays](#environments-work--home--other).
+
 ### Via other methods
 
 | Tool | Method |
@@ -43,9 +45,59 @@ Python, Node.js, Bun, Go, GitHub CLI, AWS CLI, Google Cloud SDK, Terraform, s5cm
 - **Yazi**: File manager with DuckDB previews for csv/json/parquet
 - **Kitty**: Terminal config
 - **Claude Code**: Settings, permissions, statusline, and plugin marketplaces (superpowers, agents, altis-skills, warp)
+- **opencode**: `opencode.jsonc` with plugins loaded by default (oh-my-openagent, superpowers, opencode-caveman, openrtk, openslimedit, opencode-mem, opencode-tool-search). The `opencode` tool + `rtk` binary install only in the **home** environment ([overlay](#environments-work--home--other)); opencode auto-installs the npm plugins on first launch. Note: opencode's `opencode-caveman` is a separate npm plugin from Claude Code's `caveman` marketplace — same idea, different ecosystems.
 - **Lazygit**: Delta pager integration
 - **AWS**: SSO config (plain) + credentials (age-encrypted)
 - **Kube**: Cluster configs for EKS and GKE (exec-based auth, no embedded secrets)
+
+## Environments (work / home / other)
+
+Every machine installs a **shared** set of tools, plus an **environment-specific overlay**. The environment is chosen once when you run `chezmoi init` (prompt: `work`, `home`, or `other` — defaults to `home`) and stored in chezmoi's config as `environment`.
+
+### How it works
+
+mise supports config "environments": when `MISE_ENV` is set, mise merges an extra config file on top of the base one. The shells (`.zshrc`/`.bashrc`) export `MISE_ENV` from the chezmoi-selected environment, so the right overlay is always active.
+
+| File | Loaded when | Contents |
+|------|-------------|----------|
+| `dot_config/mise/config.toml` | always | shared tools (every machine) |
+| `dot_config/mise/config.work.toml` | `MISE_ENV=work` | work-only tools |
+| `dot_config/mise/config.home.toml` | `MISE_ENV=home` | home-only tools |
+| `dot_config/mise/config.other.toml` | `MISE_ENV=other` | tools for any other machine |
+
+All three overlay files are deployed to every machine, but only the one matching `MISE_ENV` is ever loaded. The `run_onchange_after_01` install script exports the selected `MISE_ENV` before running `mise install`, so applying installs the shared tools **plus** the right overlay. It re-runs whenever any of the four config files change.
+
+### Choosing / changing the environment
+
+`chezmoi init` prompts for it interactively. Non-interactive:
+
+```bash
+chezmoi init --promptString "Environment (work/home/other)=work"
+```
+
+To change a machine's environment later, re-run `chezmoi init` (re-prompts), or edit `environment = "..."` in `~/.config/chezmoi/chezmoi.toml`, then `chezmoi apply`.
+
+### Adding an environment-specific tool
+
+Shared tools go in `config.toml`; environment-specific tools go in the matching overlay. For example, to install Terraform only on work machines, add it to `dot_config/mise/config.work.toml`:
+
+```toml
+[tools]
+terraform = "latest"
+```
+
+`chezmoi apply` on a work machine installs it; home/other machines never see it.
+
+### Repo-specific tools and config
+
+For tools or settings scoped to a **single project** (not a whole environment), use mise's per-directory config — this lives in the project repo, **not** in this dotfiles repo:
+
+```bash
+cd ~/path/to/project
+mise use node@20 terraform@1.7   # writes ./mise.toml, pinning tools for this dir
+```
+
+mise layers `mise.toml` (committed, shared with collaborators) and `mise.local.toml` (gitignored, personal) on top of the global config + environment overlay whenever you `cd` into that directory. Run `mise trust` once per repo to allow it. This is the right place for project-specific tool versions, env vars, and tasks.
 
 ## Shell Aliases
 
@@ -98,7 +150,10 @@ chezmoi apply
 
 | Change | Where to edit | Re-apply |
 |--------|--------------|----------|
-| Add/remove a mise tool | `dot_config/mise/config.toml` | `chezmoi apply` (auto re-runs) |
+| Add/remove a mise tool (all machines) | `dot_config/mise/config.toml` | `chezmoi apply` (auto re-runs) |
+| Add a tool for one environment | `dot_config/mise/config.<work\|home\|other>.toml` | `chezmoi apply` (auto re-runs) |
+| Add a tool for one project/repo | `mise use ...` in that repo (not here) | — (mise loads it per-dir) |
+| Change a machine's environment | Re-run `chezmoi init`, or edit `~/.config/chezmoi/chezmoi.toml` | `chezmoi apply` |
 | Upgrade all mise tools to latest | Nothing — just run `mise upgrade` | No chezmoi needed |
 | Add an apt package | `run_once_before_01-...` | Rename script or clear state |
 | Add a cargo tool | `run_once_before_05-...` | Rename script or clear state |
@@ -111,7 +166,7 @@ chezmoi apply
 
 ### mise tools
 
-Edit `dot_config/mise/config.toml` to add, remove, or pin tools. The `run_onchange_after_01` script automatically re-runs `mise install -y` whenever this file changes (it hashes the file contents).
+Edit `dot_config/mise/config.toml` to add, remove, or pin tools that should exist on **every** machine. The `run_onchange_after_01` script automatically re-runs `mise install -y` whenever this file (or any environment overlay) changes (it hashes the file contents). For tools that should only exist in one environment, see [Environments](#environments-work--home--other).
 
 To pin a specific version, change `"latest"` to a version string:
 
@@ -235,6 +290,25 @@ Project-level Claude config (like `CLAUDE.md` or `.claude/settings.local.json` w
 #### Installing/enabling skills
 
 Skills come from plugin marketplaces. After `chezmoi apply` clones the marketplace repos, use `/install-skill` inside Claude Code to browse and enable skills from available marketplaces.
+
+## open-design (optional, not automated)
+
+[nexu-io/open-design](https://github.com/nexu-io/open-design) is a local-first design app + daemon + `od` CLI + MCP server — **not** an opencode plugin. opencode consumes it over MCP. It's intentionally **not wired into the dotfiles**: it isn't on npm and has no stable Linux build (only macOS `.dmg` / Windows `.exe`), so on Linux it runs via Docker or from source. To run it manually when wanted:
+
+```bash
+git clone https://github.com/nexu-io/open-design && cd open-design/deploy
+cp .env.example .env
+# set OD_API_TOKEN: openssl rand -hex 32
+docker compose up -d              # serves http://localhost:7456
+```
+
+Then wire its MCP server into opencode (adds an `mcp` entry to `~/.config/opencode/opencode.json`):
+
+```bash
+od mcp install opencode           # use `--print` to preview, `--uninstall` to remove
+```
+
+If you later want this reproducible across machines, the resulting opencode MCP entry can be copied into `dot_config/opencode/opencode.jsonc`.
 
 ## Local Overrides
 

@@ -1,0 +1,4 @@
+# Tools for any other environment. Merged on top of config.toml when MISE_ENV=other.
+[tools]
+# example:
+# some-tool = "latest"
