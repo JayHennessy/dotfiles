@@ -37,6 +37,13 @@ if command -v zoxide &>/dev/null; then
     eval "$(zoxide init zsh)"
 fi
 
+# television (tv) — must come after fzf so it wins the Ctrl-R binding
+if command -v tv &>/dev/null; then
+    eval "$(tv init zsh)"
+    # Keep Ctrl-T on fzf's file widget; tv owns Ctrl-R (history) only
+    bindkey '^T' fzf-file-widget
+fi
+
 # Aliases
 if command -v nvim &>/dev/null; then
     alias vim='nvim'
