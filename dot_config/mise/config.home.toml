@@ -9,3 +9,5 @@ rtk = "latest"
 # from PyPI via the pipx backend. Provides the `hermes`/`hermes-acp`/`hermes-agent`
 # CLIs. Needs Python >=3.11,<3.14, so uv picks 3.13 (mise's python=latest is 3.14).
 "pipx:hermes-agent" = "latest"
+# ffmpeg - runtime dep for hermes-agent's voice/media features.
+ffmpeg = "latest"
