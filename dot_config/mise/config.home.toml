@@ -11,3 +11,7 @@ rtk = "latest"
 "pipx:hermes-agent" = "latest"
 # ffmpeg - runtime dep for hermes-agent's voice/media features.
 ffmpeg = "latest"
+# headroom (chopratejas/headroom) - LLM token-compression library/proxy/MCP server.
+# Not in the mise registry; installed from PyPI (headroom-ai) via the pipx backend
+# with agent-focused extras (proxy, mcp, code, memory). Provides the `headroom` CLI.
+"pipx:headroom-ai[proxy,mcp,code,memory]" = "latest"
