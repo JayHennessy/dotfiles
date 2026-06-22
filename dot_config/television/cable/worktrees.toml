@@ -1,0 +1,27 @@
+[metadata]
+name = "worktrees"
+description = '''Fuzzy-find git worktrees under ~/.worktrees and jump to the selected folder.
+
+Only real worktrees (dirs containing a `.git` file) are listed; intermediate
+path segments from slash-style branch names (e.g. `feat/`) are skipped.
+
+The selected path is printed to stdout, so it composes with `cd "$(tv worktrees)"`.
+'''
+requirements = ["git", "find"]
+
+[source]
+command = "find \"$HOME/.worktrees\" -mindepth 2 -maxdepth 6 -name .git -printf '%h\\n' 2>/dev/null | sort"
+
+[preview]
+command = '''
+git -C '{}' status -sb 2>/dev/null
+echo
+git -C '{}' log --oneline --graph --decorate -15 2>/dev/null
+'''
+
+[ui]
+layout = "portrait"
+preview_panel = { size = 65, header = "{}" }
+
+[keybindings]
+shortcut = "f4"

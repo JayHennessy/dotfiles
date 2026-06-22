@@ -46,6 +46,18 @@ if command -v tv &>/dev/null; then
     eval "$(tv init zsh)"
     # Keep Ctrl-T on fzf's file widget; tv owns Ctrl-R (history) only
     bindkey '^T' fzf-file-widget
+
+    # wt: fuzzy-find a git worktree (tv 'worktrees' channel) and cd into it
+    wt() {
+        local dir
+        dir=$(tv worktrees) || return
+        [[ -n "$dir" && -d "$dir" ]] && builtin cd -- "$dir"
+    }
+    # Alt-w keybind: launch the worktree picker from the prompt
+    # (requires Warp's voice_input_toggle_key = "alt_left" to be disabled)
+    _tv_worktree_widget() { wt; zle reset-prompt; }
+    zle -N _tv_worktree_widget
+    bindkey '^[w' _tv_worktree_widget
 fi
 
 # Aliases
