@@ -18,9 +18,19 @@ fi
 
 echo "==> Installing yazi plugins..."
 ya pkg add wylie102/duckdb 2>/dev/null || true
-# --discard: yazi aborts if a deployed plugin's files differ from its recorded
-# hash (it treats them as "locally modified"). The plugins are managed, not
-# hand-edited, so discard and redeploy cleanly instead of failing the apply.
-ya pkg install --discard
+
+# yazi >= 26.x removed `ya pkg install --discard`. Without it, install aborts when a
+# deployed plugin's files differ from its recorded hash ("locally modified"). These
+# plugins are managed, not hand-edited, so delete the deployed dirs first and let
+# install redeploy them cleanly — reproducing the old --discard behavior.
+plugins_dir="${XDG_CONFIG_HOME:-$HOME/.config}/yazi/plugins"
+pkg_toml="${XDG_CONFIG_HOME:-$HOME/.config}/yazi/package.toml"
+if [ -f "$pkg_toml" ]; then
+    grep -oP '^\s*use\s*=\s*"\K[^"]+' "$pkg_toml" | while read -r use; do
+        rm -rf "$plugins_dir/${use##*/}.yazi"
+    done
+fi
+
+ya pkg install
 
 echo "==> Yazi plugins installed."
