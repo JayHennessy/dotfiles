@@ -76,6 +76,10 @@ if command -v lazydocker &>/dev/null; then
     alias ld='lazydocker'
 fi
 
+if command -v kubectx &>/dev/null; then
+    alias ktx='kubectx'
+fi
+
 if command -v k9s &>/dev/null; then
     alias k='k9s'
 fi
@@ -104,6 +108,15 @@ fi
 
 if command -v aws-vault &>/dev/null; then
     alias av='aws-vault'
+{{- if eq .environment "work" }}
+
+    # connect-notebook - shell into jay-vscode-0 notebook pod on dev cluster
+    connect-notebook() {
+        aws-vault exec platform-engineer-kflow -- kubectl exec -it \
+            --context 'arn:aws:eks:ca-central-1:876954890468:cluster/dev' \
+            -n kubeflow-jay jay-vscode-0 -- /bin/bash
+    }
+{{- end }}
 fi
 
 if command -v nvim &>/dev/null; then
