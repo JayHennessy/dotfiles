@@ -1,0 +1,7 @@
+[Unit]
+Description=Weekly Claude Code workflow retrospective
+
+[Service]
+Type=oneshot
+ExecStart=%h/.claude/scripts/weekly-retro.sh
+WorkingDirectory=%h/dotfiles

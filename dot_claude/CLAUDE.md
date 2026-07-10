@@ -18,3 +18,5 @@
   - Something that should happen automatically on an event (after edits, before commits, etc.) → suggest a **hook**
   - Repeated permission prompts for the same safe commands → suggest a **permissions allowlist entry**
 - Make the suggestion brief and concrete (what to add, where, and why), ideally at a natural pause or end of the task — don't interrupt mid-flow. Only suggest when the value is real; skip one-offs.
+- **When I correct your approach, tool choice, or style, persist it to your memory immediately** as feedback (what was wrong, why, how to apply next time) so the same correction never has to be given twice.
+- **Also append every workflow-improvement suggestion to `~/.claude/improvements.md`** (create if missing) with the date and a one-line rationale, so suggestions survive the session. A weekly retro job consumes this inbox — remove entries once implemented.

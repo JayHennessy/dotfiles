@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# units hash: {{ include "dot_config/systemd/user/claude-retro.service" | sha256sum }} {{ include "dot_config/systemd/user/claude-retro.timer" | sha256sum }}
+
+if ! command -v systemctl &>/dev/null; then
+    echo "==> systemctl not found, skipping claude-retro timer setup."
+    exit 0
+fi
+
+echo "==> Enabling claude-retro weekly timer..."
+systemctl --user daemon-reload
+systemctl --user enable --now claude-retro.timer
+echo "==> claude-retro.timer enabled."

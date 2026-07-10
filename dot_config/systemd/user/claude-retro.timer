@@ -1,0 +1,9 @@
+[Unit]
+Description=Run Claude workflow retro Mondays ~8:57am
+
+[Timer]
+OnCalendar=Mon 08:57
+Persistent=true
+
+[Install]
+WantedBy=timers.target
