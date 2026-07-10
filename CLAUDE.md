@@ -3,6 +3,9 @@
 ## Commits
 
 - **Never include `Co-Authored-By` lines in commit messages.** No Claude co-authorship attribution.
+- **After applying a change with chezmoi and verifying it works, commit and push it without asking.**
+  Rebase on the remote (`git pull --rebase`) if the push is rejected. Leave unrelated
+  work-in-progress files out of the commit.
 
 ## Mise Tool Management
 
