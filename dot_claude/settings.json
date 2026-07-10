@@ -1,7 +1,16 @@
 {
   "effortLevel": "xhigh",
   "permissions": {
-    "defaultMode": "auto"
+    "defaultMode": "auto",
+    "allow": [
+      "Bash(bun test)",
+      "Bash(bun test *)",
+      "Bash(just --list)",
+      "Bash(chezmoi data)",
+      "Bash(chezmoi data *)",
+      "Bash(mise registry *)",
+      "Bash(mise which *)"
+    ]
   },
   "hooks": {
     "PreToolUse": [
