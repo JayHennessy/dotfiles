@@ -1,9 +1,9 @@
 ---
-name: do-ticket
-description: "Take a Linear ticket end-to-end: evaluate scope, plan with self-critique, implement with TDD in a worktree, and push a PR. Use whenever the user invokes /do-ticket, pastes a Linear ticket ID or URL and wants it done — 'work on ALT-123', 'pick up this ticket', 'implement this issue', 'do this ticket', 'knock out this issue' — or asks to execute, complete, or build a ticketed piece of work, even if they never say the word 'ticket'."
+name: pickup
+description: "Take a Linear ticket end-to-end: evaluate scope, plan with self-critique, implement with TDD in a worktree, and push a PR. Use whenever the user invokes /pickup, pastes a Linear ticket ID or URL and wants it done — 'pick up ALT-123', 'work on this ticket', 'implement this issue', 'do this ticket', 'knock out this issue' — or asks to execute, complete, or build a ticketed piece of work, even if they never say the word 'ticket'."
 ---
 
-# Do Ticket
+# Pickup
 
 Take a Linear ticket from ID to pushed PR, autonomously. The user is delegating the whole
 loop — evaluation, planning, implementation, review, PR — so don't check in at each phase.
@@ -13,7 +13,7 @@ into one message rather than dribbling them out.
 
 ## Input
 
-`/do-ticket <ticket-id-or-url>` — a Linear issue ID (e.g. `ALT-123`) or URL.
+`/pickup <ticket-id-or-url>` — a Linear issue ID (e.g. `ALT-123`) or URL.
 If no ticket is given, ask for one.
 
 Run from the repository the ticket's work belongs to. If the current directory clearly
