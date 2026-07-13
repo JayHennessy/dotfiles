@@ -1,0 +1,130 @@
+#!/usr/bin/env bash
+# zj-unwedge — recover a wedged remote zellij session so it can be re-attached.
+#
+# A long-lived zellij *server* can deadlock: its IPC socket stops answering, so
+# every `zellij attach` hangs forever on "Loading Zellij". Clearing attach
+# clients does not help — the fault is the server. This tool probes the server,
+# and if it is wedged, kills it and removes the stale socket so the next
+# `zellij attach <session>` resurrects from the serialized layout.
+#
+# Runs everything on the remote via rex, so it works for any rex env.
+#
+# Usage:
+#   zj-unwedge [env] [session] [-y|--yes]
+#     env       rex env: calgary (default), kflow, uhn-gcp, or a client env
+#     session   session name; default 1 (s1 for kflow)
+#     -y        skip the confirmation prompt before killing a wedged server
+#
+# Exit: 0 = healthy or successfully unwedged; 1 = still wedged / error.
+
+set -euo pipefail
+
+REX="${REX:-$HOME/altis/rex/rex}"
+PROBE_TIMEOUT="${ZJ_PROBE_TIMEOUT:-8}"
+
+env="calgary"
+sess=""
+assume_yes=0
+
+for arg in "$@"; do
+  case "$arg" in
+    -y|--yes)   assume_yes=1 ;;
+    -h|--help)  awk 'NR==1{next} /^#/{s=$0; sub(/^# ?/,"",s); print s; next} {exit}' "$0"; exit 0 ;;
+    -*)         echo "zj-unwedge: unknown flag $arg" >&2; exit 2 ;;
+    *)          if [[ -z "${env_set:-}" ]]; then env="$arg"; env_set=1;
+                else sess="$arg"; fi ;;
+  esac
+done
+
+# Default session per env (kflow's rex session is s1; everything else is 1).
+if [[ -z "$sess" ]]; then
+  case "$env" in kflow) sess="s1" ;; *) sess="1" ;; esac
+fi
+
+[[ -x "$REX" ]] || { echo "zj-unwedge: rex not found at $REX" >&2; exit 2; }
+
+echo "==> env=$env session=$sess (probe timeout ${PROBE_TIMEOUT}s)"
+
+# --- Stage 1: probe the server remotely -------------------------------------
+# Returns:  HEALTHY | WEDGED | NOSERVER  on the last line.
+probe_body=$(cat <<'EOS'
+sock_root="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/zellij"
+srv_pids=$(pgrep -f "zellij --server .*/zellij/[^/]*/${SESS}$" || true)
+if [[ -z "$srv_pids" ]]; then
+  echo "no live server for session ${SESS}"
+  echo NOSERVER; exit 0
+fi
+echo "server pid(s): $srv_pids"
+if timeout "${PT}" zellij --session "${SESS}" action query-tab-names >/dev/null 2>&1; then
+  echo HEALTHY
+else
+  rc=$?
+  echo "probe exit=$rc (124 = timed out = deadlocked)"
+  echo WEDGED
+fi
+EOS
+)
+probe_out=$("$REX" run "$env" "SESS='$sess'; PT='$PROBE_TIMEOUT'; $probe_body" 2>&1)
+echo "$probe_out"
+state=$(printf '%s\n' "$probe_out" | tail -1 | tr -d '[:space:]')
+
+case "$state" in
+  HEALTHY)
+    echo "==> server is responsive — NOT wedged. Just attach:"
+    echo "      zellij attach $sess"
+    exit 0 ;;
+  NOSERVER)
+    echo "==> no live server. Cleaning any stale socket, then it's resurrectable." ;;
+  WEDGED)
+    : ;;
+  *)
+    echo "zj-unwedge: could not determine server state" >&2; exit 1 ;;
+esac
+
+# --- Stage 2: show what will die, confirm -----------------------------------
+if [[ "$state" == "WEDGED" ]]; then
+  echo "==> descendants that will be KILLED with the wedged server:"
+  tree_body=$(cat <<'EOS'
+for p in $(pgrep -f "zellij --server .*/zellij/[^/]*/${SESS}$"); do
+  if command -v pstree >/dev/null 2>&1; then pstree -a "$p"; else
+    ps -o pid,ppid,etime,cmd --forest -g "$(ps -o sid= -p "$p" | tr -d ' ')" 2>/dev/null \
+      || ps --ppid "$p" -o pid,etime,cmd; fi
+done
+EOS
+)
+  "$REX" run "$env" "SESS='$sess'; $tree_body" 2>&1 || true
+  echo "   (interactive SLURM allocs / claude sessions in there do NOT survive)"
+
+  if [[ "$assume_yes" -ne 1 ]]; then
+    read -r -p "Kill wedged server for session '$sess' on $env? [y/N] " ans
+    case "$ans" in y|Y|yes|YES) ;; *) echo "aborted."; exit 1 ;; esac
+  fi
+fi
+
+# --- Stage 3: kill + clean socket + verify resurrectable --------------------
+fix_body=$(cat <<'EOS'
+sock_root="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/zellij"
+pids=$(pgrep -f "zellij --server .*/zellij/[^/]*/${SESS}$" || true)
+if [[ -n "$pids" ]]; then
+  echo "killing server pid(s): $pids"
+  kill -9 $pids 2>/dev/null || true
+  sleep 2
+fi
+still=$(pgrep -f "zellij --server .*/zellij/[^/]*/${SESS}$" || true)
+[[ -n "$still" ]] && { echo "ERROR: server still alive: $still"; exit 1; }
+# Remove the stale unix socket named exactly after the session (dead socket is
+# what makes the next attach hang again).
+if [[ -d "$sock_root" ]]; then
+  find "$sock_root" -maxdepth 2 -type s -name "${SESS}" -print -delete 2>/dev/null || true
+fi
+echo "--- zellij list-sessions ---"
+zellij list-sessions 2>&1 || true
+EOS
+)
+echo "==> unwedging..."
+"$REX" run "$env" "SESS='$sess'; $fix_body" 2>&1
+
+echo
+echo "==> done. Resurrect the session (structure restored, commands do not auto-rerun):"
+echo "      zellij attach $sess"
+echo "   On $env:  $REX shell $env   then   zellij attach $sess"
