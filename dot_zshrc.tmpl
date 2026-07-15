@@ -5,6 +5,9 @@
 
 # Path
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/go/bin:$PATH"
+{{- if eq .environment "work" }}
+export PATH="$HOME/altis/rex:$PATH"
+{{- end }}
 
 # oh-my-zsh
 if [ -d "$HOME/.oh-my-zsh" ]; then
