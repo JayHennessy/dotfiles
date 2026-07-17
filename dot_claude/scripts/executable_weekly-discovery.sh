@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Weekly dev discovery research — run headless by the claude-discovery systemd
-# user timer (Fridays 8:30am). Runs the last30days skill over coding/AI/data-eng/
+# user timer (Fridays 8:10am). Runs the last30days skill over coding/AI/data-eng/
 # software-dev/medical-imaging and writes a summary report for Friday dev
 # discovery hour. Read-only: it never modifies repos or config.
 set -euo pipefail
@@ -22,8 +22,10 @@ Use the Skill tool to invoke the "last30days" skill with this query:
 
 Prioritize GitHub (new/trending repos, notable releases) and Reddit
 (r/programming, r/MachineLearning, r/dataengineering, r/LocalLLaMA and
-similar), with Hacker News as a secondary source. Skip sources that need
-missing credentials without stalling.
+similar), with Hacker News as a secondary source. Do NOT query X/Twitter
+or YouTube — they are intentionally excluded, so don't mention them as
+missing coverage. Skip any other source that needs missing credentials
+without stalling.
 
 After the research completes, output a markdown summary (this is your final
 message, it is saved to a file):
