@@ -1,0 +1,7 @@
+[Unit]
+Description=Weekly Claude dev discovery research (last30days)
+
+[Service]
+Type=oneshot
+ExecStart=%h/.claude/scripts/weekly-discovery.sh
+WorkingDirectory=%h

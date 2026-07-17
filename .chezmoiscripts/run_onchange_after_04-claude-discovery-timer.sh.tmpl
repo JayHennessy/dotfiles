@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# units hash: {{ include "dot_config/systemd/user/claude-discovery.service" | sha256sum }} {{ include "dot_config/systemd/user/claude-discovery.timer" | sha256sum }}
+
+if ! command -v systemctl &>/dev/null; then
+    echo "==> systemctl not found, skipping claude-discovery timer setup."
+    exit 0
+fi
+
+echo "==> Enabling claude-discovery weekly timer..."
+systemctl --user daemon-reload
+systemctl --user enable --now claude-discovery.timer
+echo "==> claude-discovery.timer enabled."
