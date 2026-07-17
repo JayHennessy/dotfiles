@@ -1,5 +1,9 @@
 # User Guidelines
 
+## Commits
+
+- **Never include `Co-Authored-By` lines in commit messages.** No Claude co-authorship attribution.
+
 ## Plans, Specs, and Docs
 
 - **All plans, specs, and documentation should be saved in a repo-specific folder within `~/.claude/`.**

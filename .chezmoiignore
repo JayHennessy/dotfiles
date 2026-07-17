@@ -34,3 +34,6 @@ aws-ssh-plan.md
 .claude/stats-cache.json
 .claude/telemetry/
 .claude/todos/
+
+# Dotfiles-repo project instructions for Claude Code — do not deploy to ~
+CLAUDE.md
