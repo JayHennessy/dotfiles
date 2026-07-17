@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Weekly workflow retrospective — run headless by the claude-retro systemd user
-# timer (Mondays ~8:57am). Mines the improvement inbox + claude-mem observations
+# timer (Fridays 8:30am). Mines the improvement inbox + claude-mem observations
 # and writes a proposals report. Read-only: it never modifies repos or config.
 set -euo pipefail
 
