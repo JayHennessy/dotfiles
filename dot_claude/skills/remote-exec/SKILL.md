@@ -51,6 +51,8 @@ rex run <env> 'tail -50 /tmp/rex-out.log'     # or: rex pull <env> /tmp/rex-out.
 
 - `rex push <env> <local> <remote-path>`: remote path resolves from the **pod home**, not the `--repo` root. `--repo clinical-db` + push to `clinical-db/...` double-prefixes. Use home-relative or /tmp paths.
 - calgary: default python3 has no pyarrow — use the project venv (via `just`) or duckdb CLI for parquet.
+- calgary: **DuckDB writes to a DB on `/work/altis` (NFS) SIGFPE** ("Floating point exception (core dumped)") mid-operation on large writes; reads over NFS are fine. To mutate a calgary DuckDB, `cp` it to local `/tmp`, run the write there, verify, then `cp`+`mv` the file back over the original. (Small metadata-only writes like `DROP TABLE` of empty tables are usually fine directly.) A negative PID in a "Conflicting lock is held in PID -N" error is the DuckDB-over-NFS stale-lock tell.
+- calgary: importing the ingestion loader chain (`load_raw_*` → `read_data` → polars) in standalone python SIGILLs (CPU lacks polars' instructions; `POLARS_SKIP_CPU_CHECK` doesn't stop the crash). Read parquet directly with pandas in validation scripts.
 - kflow: `~/shared/users/jhennessy/bin/just` is a wrong-arch binary and the aqua shim fails non-interactively — fetch a static x86_64-musl `just` until fixed.
 
 ## Rules
