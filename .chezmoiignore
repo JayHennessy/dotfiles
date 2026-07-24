@@ -18,6 +18,7 @@ aws-ssh-plan.md
 .kube/cache/
 .kube/gke_gcloud_auth_plugin_cache
 .kube/kubectx
+.kube/config          # kubectl churns current-context + indent; not chezmoi's to own
 
 # Claude Code (transient/generated files)
 .claude/.credentials.json
