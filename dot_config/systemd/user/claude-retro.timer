@@ -1,8 +1,8 @@
 [Unit]
-Description=Run Claude workflow retro Fridays 8:30am
+Description=Run Claude workflow retro Fridays 1:20am
 
 [Timer]
-OnCalendar=Fri 08:30
+OnCalendar=Fri 01:20
 Persistent=true
 
 [Install]

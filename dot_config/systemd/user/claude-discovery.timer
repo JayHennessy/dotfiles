@@ -1,8 +1,8 @@
 [Unit]
-Description=Run Claude dev discovery research Fridays 8:10am
+Description=Run Claude dev discovery research Fridays 1:00am
 
 [Timer]
-OnCalendar=Fri 08:10
+OnCalendar=Fri 01:00
 Persistent=true
 
 [Install]

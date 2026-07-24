@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Weekly dev discovery research — run headless by the claude-discovery systemd
-# user timer (Fridays 8:10am). Runs the last30days skill over coding/AI/data-eng/
+# user timer (Fridays 1:00am). Runs the last30days skill over coding/AI/data-eng/
 # software-dev/medical-imaging and writes a summary report for Friday dev
 # discovery hour. Read-only: it never modifies repos or config.
 set -euo pipefail
