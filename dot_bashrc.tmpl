@@ -44,6 +44,12 @@ if command -v zoxide &>/dev/null; then
     eval "$(zoxide init bash)"
 fi
 
+# Claude Code default model. Set here rather than as the `model` key in
+# ~/.claude/settings.json because `/model` writes that key back to the file on
+# every switch, which drifts against chezmoi. ANTHROPIC_MODEL applies per launch
+# and is never persisted, so session switches stay session-local.
+export ANTHROPIC_MODEL='opus[1m]'
+
 # Aliases
 if command -v nvim &>/dev/null; then
     alias vim='nvim'

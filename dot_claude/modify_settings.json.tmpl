@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Merge repo-managed Claude Code settings into the live ~/.claude/settings.json.
+#
+# Claude Code rewrites this file at runtime: `/model` replaces "model", and
+# installing or toggling plugins rewrites "enabledPlugins" /
+# "extraKnownMarketplaces". Managing the whole file caused perpetual chezmoi
+# drift and model-only commits, so those keys are read back from the live file
+# instead of being owned here.
+#
+#   repo-authoritative : permissions, hooks, statusLine, effortLevel
+#   live wins          : model, and per-key entries under enabledPlugins /
+#                        extraKnownMarketplaces (repo entries seed new machines)
+#
+# Edit the managed config in .chezmoitemplates/claude-settings.json, not here.
+set -euo pipefail
+
+current=$(cat)
+[ -n "${current//[[:space:]]/}" ] || current='{}'
+
+desired=$(
+	cat <<'CLAUDE_SETTINGS_JSON'
+{{ includeTemplate "claude-settings.json" }}
+CLAUDE_SETTINGS_JSON
+)
+
+if ! command -v jq >/dev/null 2>&1; then
+	printf 'modify_settings.json: jq not on PATH, leaving %s untouched\n' \
+		"${CHEZMOI_TARGET_FILE:-~/.claude/settings.json}" >&2
+	printf '%s' "$current"
+	exit 0
+fi
+
+jq -n --argjson cur "$current" --argjson des "$desired" '
+  ($des * ($cur | {model} | with_entries(select(.value != null))))
+  | .enabledPlugins =
+      (($des.enabledPlugins // {}) * ($cur.enabledPlugins // {}))
+  | .extraKnownMarketplaces =
+      (($des.extraKnownMarketplaces // {}) * ($cur.extraKnownMarketplaces // {}))
+'
