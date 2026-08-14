@@ -43,3 +43,6 @@ kubectx = "latest"
 "npm:@google/gemini-cli" = "latest"
 glow = "latest"
 "aqua:alexpasmantier/television" = "latest"
+# tuicr (agavra/tuicr) - TUI code reviewer. Not in the mise registry or aqua;
+# installed from GitHub release assets via the github backend.
+"github:agavra/tuicr" = "latest"
