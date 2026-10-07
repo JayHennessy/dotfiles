@@ -1,0 +1,22 @@
+[Unit]
+Description=Headroom compression proxy (opencode -> OpenCode Zen)
+Documentation=https://github.com/chopratejas/headroom
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+# Auto-compress opencode's traffic, then forward to OpenCode Zen.
+# opencode uses BOTH protocols against Zen: OpenAI (/v1/chat/completions) for
+# gpt/gemini models and Anthropic (/v1/messages, x-api-key auth) for claude
+# models — so both upstreams must point at Zen, not the default public APIs.
+Environment=OPENAI_TARGET_API_URL=https://opencode.ai/zen/v1
+Environment=ANTHROPIC_TARGET_API_URL=https://opencode.ai/zen/v1
+# Disable anonymous telemetry; keep the embedder on CPU.
+Environment=HEADROOM_DISABLE_POSTHOG=1
+# `latest` symlink tracks whatever mise has installed for the home overlay.
+ExecStart=%h/.local/share/mise/installs/pipx-headroom-ai/latest/bin/headroom proxy --port 8787
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target

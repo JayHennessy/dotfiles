@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Home-only, user-local AO desktop AppImage. Version and release checksum are
+# pinned together: edit both to upgrade reproducibly. No sudo or npm legacy CLI.
+{{ if eq .environment "home" -}}
+version='v0.13.4'
+sha256='9f74ccdc2d5b518541a4079603fa0c19848ecf5d19857a3819274e1a00faa379'
+asset='agent-orchestrator-linux-x64.AppImage'
+url="https://github.com/OrchestratorInc/agent-orchestrator/releases/download/${version}/${asset}"
+target="$HOME/.local/opt/agent-orchestrator/${asset}"
+
+case "$(uname -s):$(uname -m)" in
+    Linux:x86_64) ;;
+    *) echo 'AO AppImage is pinned for Linux x86_64 only; skipping.' >&2; exit 0 ;;
+esac
+
+if [ -f "$target" ] && [ "$(sha256sum "$target" | cut -d' ' -f1)" = "$sha256" ]; then
+    echo "AO ${version} is already installed and checksum matches."
+    exit 0
+fi
+
+tmpdir="$(mktemp -d "${TMPDIR:-$HOME/.cache}/ao-install.XXXXXX")"
+trap 'rm -rf "$tmpdir"' EXIT
+curl --fail --location --retry 3 --output "$tmpdir/$asset" "$url"
+printf '%s  %s\n' "$sha256" "$tmpdir/$asset" | sha256sum --check --status
+install -D -m 0755 "$tmpdir/$asset" "$target"
+printf 'Installed AO %s at %s (SHA-256 verified).\n' "$version" "$target"
+{{ end -}}

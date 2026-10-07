@@ -18,6 +18,10 @@ shopt -s globstar 2>/dev/null
 
 # Path
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/go/bin:$PATH"
+{{- if eq .environment "home" }}
+# OpenCode's official installer places the binary here; keep it ahead of mise.
+export PATH="$HOME/.opencode/bin:$PATH"
+{{- end }}
 {{- if eq .environment "work" }}
 export PATH="$HOME/altis/rex:$PATH"
 {{- end }}

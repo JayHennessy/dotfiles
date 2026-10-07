@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Only the home environment installs these agent CLIs. Other environments keep
+# using their own mise overlays and are intentionally unaffected.
+{{ if eq .environment "home" -}}
+export PATH="$HOME/.opencode/bin:$HOME/.local/bin:$PATH"
+
+# Hermes' official bootstrap creates ~/.hermes/hermes-agent and the ~/.local/bin
+# launcher. Do not touch an existing checkout/active gateway during chezmoi apply;
+# update it deliberately with `hermes update` instead.
+if [ ! -x "$HOME/.local/bin/hermes" ]; then
+    installer="$(mktemp "${TMPDIR:-$HOME/.cache}/hermes-install.XXXXXXXX")"
+    curl -fsSL https://hermes-agent.nousresearch.com/install.sh -o "$installer"
+    bash "$installer" --non-interactive
+    rm -f "$installer"
+fi
+
+# OpenCode 2 intentionally replaces the V1 binary in ~/.opencode/bin. V1
+# plugins are NOT compatible; the V2 config is managed in this dotfiles repo.
+# The official installer must not edit chezmoi-managed shell rc files.
+if [ ! -x "$HOME/.opencode/bin/opencode" ] ||
+   [ "$("$HOME/.opencode/bin/opencode" --version 2>/dev/null)" != 'opencode v2.0.24' ]; then
+    installer="$(mktemp "${TMPDIR:-$HOME/.cache}/opencode-v2-install.XXXXXXXX")"
+    curl -fsSL https://opencode.ai/v2/install -o "$installer"
+    bash "$installer" --version 2.0.24 --no-modify-path
+    rm -f "$installer"
+fi
+
+# The previous OpenCode V1 sessions can collide with V2's default managed
+# service port (49374). Configure a dedicated home-only V2 port so normal
+# `opencode` commands and AO can start the managed service reliably.
+"$HOME/.opencode/bin/opencode" service set port 53992
+{{ end -}}

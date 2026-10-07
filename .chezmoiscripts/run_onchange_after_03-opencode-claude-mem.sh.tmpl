@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# config.home.toml hash: {{ include "dot_config/mise/config.home.toml" | sha256sum }}
+# opencode.jsonc hash:   {{ include "dot_config/opencode/opencode.jsonc" | sha256sum }}
+
+# OpenCode 2 auto-discovers global *.js plugin files. The previous claude-mem
+# bundle and Herdr state hook use the V1 plugin API; merely removing their
+# config entries is insufficient. Preserve them for rollback. The V2-compatible
+# memory bridge is installed from the `plugins` list in opencode.jsonc instead.
+{{ if eq .environment "home" -}}
+for name in claude-mem.js herdr-agent-state.js; do
+    legacy="$HOME/.config/opencode/plugins/$name"
+    if [ -f "$legacy" ]; then
+        mkdir -p "$HOME/.config/opencode/legacy-v1"
+        mv "$legacy" "$HOME/.config/opencode/legacy-v1/$name"
+    fi
+done
+{{ end -}}

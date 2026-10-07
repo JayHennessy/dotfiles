@@ -35,6 +35,13 @@ aws-ssh-plan.md
 .claude/stats-cache.json
 .claude/telemetry/
 .claude/todos/
-
 # Dotfiles-repo project instructions for Claude Code — do not deploy to ~
 CLAUDE.md
+
+# headroom proxy systemd unit is home-env only (its binary is in the home overlay)
+{{ if ne .environment "home" }}
+.config/systemd/user/headroom-proxy.service
+.config/opencode/opencode.jsonc
+.config/opencode/oh-my-openagent.json
+.local/share/applications/agent-orchestrator.desktop
+{{ end }}

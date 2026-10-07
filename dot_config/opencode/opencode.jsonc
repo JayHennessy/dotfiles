@@ -1,14 +1,25 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  // Plugins are loaded by default on opencode startup and auto-installed from npm.
-  // The opencode `plugin` field is a plain string[] (package name, optional @version).
-  "plugin": [
-    "oh-my-openagent@latest", // code-yeongyu/oh-my-openagent multi-agent harness (OpenCode "Ultimate" edition). npm pkg is oh-my-opencode, dual-published; opencode.json prefers the "oh-my-openagent" entry (legacy "oh-my-opencode" loads with a warning). Full setup (11-agent model config + provider auth) needs a one-time interactive `bunx oh-my-openagent install` per machine — not committable. Anon telemetry on by default; opt out with OMO_DISABLE_POSTHOG=1.
-    "superpowers@git+https://github.com/obra/superpowers.git", // obra/superpowers skills framework (separate from the Claude marketplace install)
-    "opencode-caveman", // caveman token-compression for opencode (npm; the Claude caveman is a separate marketplace plugin)
-    "openrtk", // RTK (Rust Token Killer) - needs the `rtk` binary (installed via mise, home overlay)
-    "openslimedit@latest",
-    "opencode-mem",
-    "opencode-tool-search"
-  ]
+  // OpenCode 2 plugin API. oh-my-openagent remains configured in
+  // oh-my-openagent.json for a future migration, but cannot load on V2 yet.
+  "plugins": [
+    "superpowers@git+https://github.com/obra/superpowers.git",
+    // V1-only at the time of migration (V2 fails to load these modules):
+    // "opencode-caveman",
+    // "openrtk",
+    // "openslimedit@latest",
+    "@dietrichgebert/ponytail",
+    // "opencode-tool-search", // locally disabled before the V2 migration
+    "@ephemushroom/opencode-claude-mem@0.6.2"
+  ],
+  // Route the OpenCode Zen provider through the local headroom proxy so ALL
+  // opencode traffic is auto-compressed before reaching Zen. Requires the
+  // headroom-proxy systemd --user service to be running (home env only). If the
+  // proxy is down, opencode can't reach Zen — check `systemctl --user status
+  // headroom-proxy`. Proxy upstream is set to https://opencode.ai/zen/v1.
+  "providers": {
+    "opencode": {
+      "settings": { "baseURL": "http://127.0.0.1:8787/v1" }
+    }
+  }
 }

@@ -1,17 +1,26 @@
 # Home-only tools. Merged on top of config.toml when MISE_ENV=home.
 # Move any home-specific tools here from config.toml (the shared list).
 [tools]
-opencode = "latest"
+# OpenCode is installed by the home-only chezmoi script from its official curl installer.
+# Keep it out of mise so its shim cannot shadow ~/.opencode/bin/opencode.
 # rtk (Rust Token Killer) binary - required by the 'openrtk' opencode plugin.
 # Registry maps `rtk` -> aqua:rtk-ai/rtk (the token killer, NOT the crates.io "Rust Type Kit").
 rtk = "latest"
-# hermes-agent (nousresearch/hermes-agent) - not in the mise registry; installed
-# from PyPI via the pipx backend. Provides the `hermes`/`hermes-acp`/`hermes-agent`
-# CLIs. Needs Python >=3.11,<3.14, so uv picks 3.13 (mise's python=latest is 3.14).
-"pipx:hermes-agent" = "latest"
+# Hermes Agent is installed by the home-only chezmoi script using its official
+# curl bootstrap (git checkout at ~/.hermes/hermes-agent); do not install via pipx.
 # ffmpeg - runtime dep for hermes-agent's voice/media features.
 ffmpeg = "latest"
 # headroom (chopratejas/headroom) - LLM token-compression library/proxy/MCP server.
-# Not in the mise registry; installed from PyPI (headroom-ai) via the pipx backend
-# with agent-focused extras (proxy, mcp, code, memory). Provides the `headroom` CLI.
-"pipx:headroom-ai[proxy,mcp,code,memory]" = "latest"
+# Not in the mise registry; installed from PyPI (headroom-ai) via the pipx backend.
+# Inline [extras] in the tool name get stripped by mise, so pass them via the
+# `extras` option (needed for the proxy: fastapi/uvicorn, plus mcp/code/memory).
+"pipx:headroom-ai" = { version = "latest", extras = "proxy,mcp,code,memory" }
+# claude-mem (thedotmack/claude-mem) - cross-session memory. Not in the mise
+# registry; installed from npm via the npm backend (gives the `claude-mem` CLI +
+# the bundled opencode plugin at dist/opencode-plugin/index.js). The memory
+# worker/service itself is provided by the Claude Code marketplace plugin; this
+# entry exists so the opencode plugin bundle can be deployed to
+# ~/.config/opencode/plugins/claude-mem.js (see run_onchange_after_03-opencode-
+# claude-mem). `npm i -g` only installs the SDK, NOT the worker — that's fine
+# here since the worker comes from the Claude Code plugin.
+"npm:claude-mem" = "latest"

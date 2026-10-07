@@ -31,6 +31,9 @@ This is the **shared** set installed everywhere; individual machines can add mor
 | bpytop | `pip install` |
 | tldr | `npm install -g` |
 | Claude Code | `claude.ai/install.sh` (standalone) |
+| Hermes Agent (home) | `hermes-agent.nousresearch.com/install.sh` (git checkout, `~/.local/bin/hermes`) |
+| OpenCode 2 (home) | `opencode.ai/v2/install` (`~/.opencode/bin/opencode`, pinned to 2.0.24) |
+| Agent Orchestrator (home) | SHA-256-verified Linux AppImage in `~/.local/opt/agent-orchestrator/` |
 | diffnav | `go install` |
 | lazyworktree | `go install` |
 | gh-dash | `gh extension install` |
@@ -45,7 +48,8 @@ This is the **shared** set installed everywhere; individual machines can add mor
 - **Yazi**: File manager with DuckDB previews for csv/json/parquet
 - **Kitty**: Terminal config
 - **Claude Code**: Settings, permissions, statusline, and plugin marketplaces (superpowers, agents, altis-skills, warp)
-- **opencode**: `opencode.jsonc` with plugins loaded by default (oh-my-openagent, superpowers, opencode-caveman, openrtk, openslimedit, opencode-mem, opencode-tool-search). The `opencode` tool + `rtk` binary install only in the **home** environment ([overlay](#environments-work--home--other)); opencode auto-installs the npm plugins on first launch. Note: opencode's `opencode-caveman` is a separate npm plugin from Claude Code's `caveman` marketplace — same idea, different ecosystems.
+- **opencode**: OpenCode 2 is installed for the **home** environment from its official curl installer, not mise (currently pinned to 2.0.24). The shell adds `~/.opencode/bin` ahead of mise. V2 config retains Superpowers and Ponytail and uses `@ephemushroom/opencode-claude-mem@0.6.2`; caveman, openrtk, and openslimedit failed the V2 plugin load check and are commented out. The V1-only oh-my-openagent plugin is disabled; its 10-agent config stays in the repo for a future migration ([tracking issue](https://github.com/code-yeongyu/oh-my-openagent/issues/8485)). The old V1 local claude-mem and Herdr plugins are moved to `~/.config/opencode/legacy-v1/` by the home-only chezmoi script, not deleted. The same script sets V2's managed service port to `53992` to avoid the V1/default-port collision. V2 shares config locations with V1, so do not run V1 against this V2 config.
+- **Agent Orchestrator (AO)**: The home-only chezmoi script installs the pinned, SHA-256-checked Linux AppImage (currently 0.13.4). Launch “Agent Orchestrator” from the desktop menu; add a Git repo and select the `opencode-v2` harness. AO uses the existing OpenCode auth and `gh` login; use Default approvals initially, not Bypass permissions. The desktop package manages its own daemon and does not install the legacy `ao` CLI. Upgrade by updating the version AND SHA-256 in `.chezmoiscripts/run_onchange_after_06-ao-home.sh.tmpl`, then `chezmoi apply`. AO's state under `~/.ao` is not tracked in dotfiles. Its v2 auth preflight has a hard 3-second timeout; on this machine the CLI auth probe took slightly longer, so AO reports `authStatus: unknown` despite two configured connections. Import a project and test a real agent session before depending on it; an unknown readiness indicator alone does not prove auth failure.
 - **Lazygit**: Delta pager integration
 - **AWS**: SSO config (plain) + credentials (age-encrypted)
 - **Kube**: Cluster configs for EKS and GKE (exec-based auth, no embedded secrets)
