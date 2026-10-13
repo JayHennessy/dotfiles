@@ -45,3 +45,22 @@ CLAUDE.md
 .config/opencode/oh-my-openagent.json
 .local/share/applications/agent-orchestrator.desktop
 {{ end }}
+
+# Work-env only: Claude skills, weekly retro/discovery jobs and their systemd
+# timers, plus the zellij/television helpers that came with them.
+{{ if ne .environment "work" }}
+.claude/skills/pickup
+.claude/skills/remote-exec
+.claude/skills/retro
+.claude/skills/uofc-batch-doctor
+.claude/scripts/weekly-discovery.sh
+.claude/scripts/weekly-retro.sh
+.config/systemd/user/claude-discovery.service
+.config/systemd/user/claude-discovery.timer
+.config/systemd/user/claude-retro.service
+.config/systemd/user/claude-retro.timer
+.chezmoiscripts/03-claude-retro-timer.sh
+.chezmoiscripts/04-claude-discovery-timer.sh
+.config/television/cable/worktrees.toml
+.local/bin/zj-unwedge
+{{ end }}

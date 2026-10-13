@@ -21,5 +21,16 @@
     "opencode": {
       "settings": { "baseURL": "http://127.0.0.1:8787/v1" }
     }
+  },
+  // OpenCode Quota: tuiCommandDisplay chooses whether native TUI command output appears in the session transcript or a local popup dialog.
+  // OpenCode Quota: loads the server plugin for slash commands and quota checks.
+  "plugin": [
+    "@slkiser/opencode-quota@latest"
+  ],
+  "provider": {
+    // Detected openai authentication; opencode-quota added this global provider declaration.
+    "openai": {},
+    // Detected opencode-go authentication; opencode-quota added this global provider declaration.
+    "opencode-go": {}
   }
 }
