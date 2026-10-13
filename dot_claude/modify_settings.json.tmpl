@@ -8,6 +8,7 @@
 # instead of being owned here.
 #
 #   repo-authoritative : permissions, hooks, statusLine, effortLevel
+#                        (effortLevel is only set when .environment is "work")
 #   live wins          : model, and per-key entries under enabledPlugins /
 #                        extraKnownMarketplaces (repo entries seed new machines)
 #
@@ -19,7 +20,7 @@ current=$(cat)
 
 desired=$(
 	cat <<'CLAUDE_SETTINGS_JSON'
-{{ includeTemplate "claude-settings.json" }}
+{{ includeTemplate "claude-settings.json" . }}
 CLAUDE_SETTINGS_JSON
 )
 
