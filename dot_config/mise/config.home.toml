@@ -24,3 +24,14 @@ ffmpeg = "latest"
 # claude-mem). `npm i -g` only installs the SDK, NOT the worker — that's fine
 # here since the worker comes from the Claude Code plugin.
 "npm:claude-mem" = "latest"
+# Android build toolchain for React Native / Expo apps (Bower Health).
+# JDK 17 is what the React Native Gradle build expects. `android-sdk` provides the
+# command-line tools (sdkmanager); the SDK packages themselves are installed into
+# ANDROID_HOME by run_onchange_after_07-android-sdk.
+java = "temurin-17"
+android-sdk = "latest"
+
+[env]
+ANDROID_HOME = "{{env.HOME}}/Android/Sdk"
+ANDROID_SDK_ROOT = "{{env.HOME}}/Android/Sdk"
+_.path = ["{{env.HOME}}/Android/Sdk/platform-tools"]

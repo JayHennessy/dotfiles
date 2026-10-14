@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Home environment only: Android SDK packages for building React Native / Expo
+# apps and running them on a USB-connected phone. No emulator or system images.
+{{ if eq .environment "home" -}}
+# config.home.toml hash: {{ include "dot_config/mise/config.home.toml" | sha256sum }}
+packages=(
+    "platform-tools"
+    "platforms;android-36"
+    "build-tools;35.0.0"
+    "build-tools;36.0.0"
+    "ndk;27.1.12297006"
+    "cmake;3.22.1"
+)
+
+export PATH="$HOME/.local/bin:$PATH"
+export MISE_ENV="{{ .environment }}"
+export ANDROID_HOME="$HOME/Android/Sdk"
+
+if ! command -v mise &>/dev/null; then
+    echo "==> mise not found, skipping Android SDK packages."
+    exit 0
+fi
+eval "$(mise activate bash)"
+if ! command -v sdkmanager &>/dev/null; then
+    echo "==> sdkmanager not found (mise android-sdk missing), skipping Android SDK packages."
+    exit 0
+fi
+
+mkdir -p "$ANDROID_HOME"
+echo "==> Installing Android SDK packages into $ANDROID_HOME..."
+yes | sdkmanager --sdk_root="$ANDROID_HOME" --licenses >/dev/null || true
+sdkmanager --sdk_root="$ANDROID_HOME" "${packages[@]}"
+echo "==> Android SDK packages installed."
+{{ end -}}
